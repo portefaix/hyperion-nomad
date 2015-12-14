@@ -4,7 +4,7 @@
         "region": "",
         "size": "",
         "nomad_version": "0.2.2",
-        "snapshot_name": "hyperion-nomad-0-1-0 {{timestamp}}"
+        "snapshot_name": "hyperion-nomad-0-1-0-{{timestamp}}"
     },
     "builders": [
         {

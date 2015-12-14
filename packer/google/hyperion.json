@@ -7,7 +7,7 @@
         "machine_type": "",
         "cluster_name": "",
         "nomad_version": "0.2.2",
-        "image_name": "hyperion-0-1-0-v20151214",
+        "image_name": "hyperion-nomad-0-1-0-v20151214",
         "image_description": "Nomad Base Image for Hyperion"
     },
     "builders": [
