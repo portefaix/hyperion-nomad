@@ -33,7 +33,7 @@
         {
             "type": "shell",
             "inline": [
-                "curl -o /tmp/nomad.zip -L https://releases.hashicorp.com/nomad/0.2.2/nomad_{{ user `nomad_version` }}_linux_amd64.zip",
+                "curl -o /tmp/nomad.zip -L https://releases.hashicorp.com/nomad/{{ user `nomad_version` }}/nomad_{{ user `nomad_version` }}_linux_amd64.zip",
                 "sudo unzip -d /usr/local/bin /tmp/nomad.zip",
                 "sudo mkdir /etc/nomad",
                 "ls /lib/systemd/system/"
