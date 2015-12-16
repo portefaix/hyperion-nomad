@@ -1,36 +1,74 @@
-# the instance
-resource "google_compute_instance" "nomad-node" {
+resource "google_compute_network" "nomad-network" {
+  name = "hyperion-network"
+  ipv4_range ="${var.network}"
+}
+
+# Firewall
+resource "google_compute_firewall" "hyperion-firewall-external" {
+  name = "hyperion-firewall-external"
+  network = "${google_compute_network.hyperion-network.name}"
+  source_ranges = ["0.0.0.0/0"]
+
+  allow {
+    protocol = "icmp"
+  }
+
+  allow {
+    protocol = "tcp"
+    ports = [
+      "22",   # SSH
+      "80",   # HTTP
+      "443",  # HTTPS
+      "4647", # Nomad API
+      "4648", # Serf
+    ]
+  }
+
+}
+
+resource "google_compute_firewall" "hyperion-firewall-internal" {
+  name = "hyperion-firewall-internal"
+  network = "${google_compute_network.hyperion-network.name}"
+  source_ranges = ["${google_compute_network.hyperion-network.ipv4_range}"]
+
+  allow {
+    protocol = "tcp"
+    ports = ["1-65535"]
+  }
+
+  allow {
+    protocol = "udp"
+    ports = ["1-65535"]
+  }
+}
+
+
+resource "google_compute_instance" "nomad-nodes" {
   count = "${var.nb_nodes}"
-  name = "${var.cluster_name}-${count.index+1}"
-  machine_type = "${var.gce_machine_type}"
   zone = "${var.gce_zone}"
+  name = "${var.cluster_name}-node-${count.index}" // => `xxx-node-{0,1,2}`
+  description = "Nomad node ${count.index}"
+  machine_type = "${var.gce_machine_type}"
 
   disk {
     image = "${var.gce_image}"
-    type = "pd-ssd"
+    auto_delete = true
   }
-
-  # network interface
+  metadata {
+    sshKeys = "${var.gce_ssh_user}:${file("${var.gce_ssh_public_key}")}"
+  }
   network_interface {
-    network = "${google_compute_network.nomad-net.name}"
+    network = "${google_compute_network.nomad-network.name}"
     access_config {
-      // ephemeral address
+      // ephemeral ip
     }
   }
-
-  # nomad version
-  metadata {
-    nomad_version = "${var.nomad_version}"
-  }
-
-  # define default connection for remote provisioners
   connection {
     user = "${var.gce_ssh_user}"
     key_file = "${var.gce_ssh_private_key_file}"
-    agent = "false"
+    agent = false
   }
 
-  # copy files
   provisioner "file" {
     source = "resources/server.hcl"
     destination = "/home/${var.gce_ssh_user}/server.hcl"
@@ -38,40 +76,43 @@ resource "google_compute_instance" "nomad-node" {
 
 }
 
-resource "google_compute_network" "nomad-net" {
-  name = "${var.cluster_name}-net"
-  ipv4_range ="${var.network}"
-}
 
-resource "google_compute_firewall" "nomad-ssh" {
-  name = "${var.cluster_name}-nomad-ssh"
-  network = "${google_compute_network.nomad-net.name}"
+# resource "google_compute_instance" "nomad-node" {
+#   count = "${var.nb_nodes}"
+#   name = "${var.cluster_name}-node-${count.index}" // => `xxx-node-{0,1,2}`
+#   machine_type = "${var.gce_machine_type}"
+#   zone = "${var.gce_zone}"
 
-  allow {
-    protocol = "tcp"
-    ports = ["22"]
-  }
+#   tags {
+#     Name = "${var.cluster_name}-node-${count.index}"
+#   }
 
-  target_tags = ["ssh"]
-  source_ranges = ["0.0.0.0/0"]
-}
+#   disk {
+#     image = "${var.gce_image}"
+#     # type = "pd-ssd"
+#     auto_delete = true
+#   }
 
-resource "google_compute_firewall" "nomad-internal" {
-  name = "${var.cluster_name}-nomad-internal"
-  network = "${google_compute_network.nomad-net.name}"
+#   metadata {
+#     sshKeys = "${var.gce_ssh_user}:${file("${var.gce_ssh_public_key}")}"
+#   }
 
-  allow {
-    protocol = "tcp"
-    ports = ["1-65535"]
-  }
-  allow {
-    protocol = "udp"
-    ports = ["1-65535"]
-  }
-  allow {
-    protocol = "icmp"
-  }
+#   network_interface {
+#     network = "${google_compute_network.nomad-network.name}"
+#     access_config {
+#       // ephemeral address
+#     }
+#   }
 
-  source_ranges = ["${google_compute_network.nomad-net.ipv4_range}","${var.localaddress}"]
+#   connection {
+#     user = "${var.gce_ssh_user}"
+#     key_file = "${var.gce_ssh_private_key_file}"
+#     agent = "false"
+#   }
 
-}
+#   provisioner "file" {
+#     source = "resources/server.hcl"
+#     destination = "/home/${var.gce_ssh_user}/server.hcl"
+#   }
+
+# }

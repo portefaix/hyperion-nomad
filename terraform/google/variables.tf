@@ -30,7 +30,7 @@ variable "gce_zone" {
 
 variable "gce_image" {
   description = "The name of the image to base the launched instances."
-  default = "hyperion-nomad-0-8-2-v20150904"
+  default = "hyperion-nomad-0-1-0-v20151214"
 }
 
 variable "gce_machine_type" {
@@ -49,14 +49,10 @@ variable "localaddress" {
 }
 
 variable "cluster_name" {
-  default = "portefaix-nomad"
+  default = "hyperion-nomad"
 }
 
 variable "nb_nodes" {
   description = "The number of nodes."
   default = "2"
-}
-
-variable "nomad_version" {
-  default = "0.2.0"
 }
