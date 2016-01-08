@@ -14,19 +14,24 @@
 ## Nomad
 
 
-## Initialization
+## Local
 
 Initialize environment:
 
     $ make init
 
-## Machine image
+
+## Cloud
+
+### Images
 
 Read guides to creates the machine for a cloud provider :
 
 * [Google cloud](https://github.com/portefaix/hyperion-nomad/blob/packer/google/README.md)
+* [AWS](https://github.com/portefaix/hyperion-nomad/blob/packer/ec2/README.md)
+* [Digitalocean](https://github.com/portefaix/hyperion-nomad/blob/packer/digitalocean/README.md)
 
-## Cloud infratructure
+### Infratructure
 
 Read guides to creates the infrastructure :
 
@@ -45,9 +50,6 @@ Read guides to creates the infrastructure :
 * Join the nodes, from one of the nodes, connect to the others :
 
         $ nomad server-join -address http://$SERVER:4646 $MYADDRESS
-
-
-
 
 
 ## Contributing
