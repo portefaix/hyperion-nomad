@@ -5,6 +5,8 @@
 
 ## Description
 
+![Image of components](https://github.com/portefaix/hyperion-nomad/raw/master/docs/hyperion-nomad.png "Hyperion Nomad")
+
 [hyperion][] creates a Cloud environment :
 
 - Identical machine images creation is performed using [Packer][]
