@@ -16,7 +16,10 @@
    id="svg5850"
    version="1.1"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="hyperion-nomad.svg">
+   sodipodi:docname="hyperion-nomad.svg"
+   inkscape:export-filename="/home/nlamirault/Perso/Portefaix/hyperion-nomad/docs/hyperion-nomad.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
   <defs
      id="defs5852" />
   <sodipodi:namedview
@@ -27,7 +30,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.98994949"
-     inkscape:cx="327.5559"
+     inkscape:cx="135.62692"
      inkscape:cy="728.85859"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -45,7 +48,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
